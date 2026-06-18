@@ -5,7 +5,11 @@ const { exec } = require('child_process'); // For automated Router SSH control
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // In-memory cluster storage to handle transactional pipeline tracking safely
