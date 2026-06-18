@@ -119,4 +119,23 @@ app.get('/check-status/:tx_ref', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
+// TEMPORARY TESTING ENDPOINT: Simulates a successful webhook response from Flutterwave
+app.get('/simulate-success/:tx_ref', (req, res) => {
+    const referenceKey = req.params.tx_ref;
+    
+    if (sessionRegistry[referenceKey] && sessionRegistry[referenceKey].status === 'pending') {
+        const numericToken = Math.floor(100000 + Math.random() * 900000); 
+        const finalVoucherCode = `GSM-${numericToken}`;
+
+        sessionRegistry[referenceKey].status = 'paid';
+        sessionRegistry[referenceKey].voucher = finalVoucherCode;
+        
+        console.log(`[TEST SIMULATION SUCCESS] Code created manually for reference: ${referenceKey} -> ${finalVoucherCode}`);
+        return res.status(200).send(`Success! Voucher generated: ${finalVoucherCode}. Go look at your index.html tab now!`);
+    }
+    return res.status(404).send("Transaction reference not found or already processed.");
+});
+
+
 app.listen(PORT, () => console.log(`System Core functioning smoothly on port ${PORT}`));
