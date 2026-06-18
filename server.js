@@ -15,6 +15,10 @@ app.use(express.json());
 // In-memory cluster storage to handle transactional pipeline tracking safely
 let sessionRegistry = {};
 
+app.get('/', (req, res) => {
+    res.status(200).send("Gamsam Technologies Multi-Tenant Core Engine is Live! 🚀");
+});
+
 // 1. Endpoint to initiate the mobile money prompt request
 app.post('/pay', async (req, res) => {
     const { phone, amount, business } = req.body;
